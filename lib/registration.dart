@@ -6,14 +6,24 @@ class Registration extends StatefulWidget{
   State<Registration> createState() => _RegistrationState();
 }
 
+enum MobileVerificationState {
+  SHOW_MOBILE_FORM_STATE,
+  SHOW_OTP_FORM_STATE,
+}
+
+// ignore: non_constant_identifier_names
 bool hide_password = true;
 
 class _RegistrationState extends State<Registration> {
-  @override
-  Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
-    return Scaffold(
-       body: Center(
+
+  final currentState = MobileVerificationState.SHOW_MOBILE_FORM_STATE;
+
+  final phoneController = TextEditingController();
+  final otpController = TextEditingController();
+
+  getMobileFormWidget(context){
+    return (
+      Center(
        child : 
         SingleChildScrollView(
           child: Column(
@@ -24,7 +34,8 @@ class _RegistrationState extends State<Registration> {
                style: 
                  TextStyle(
                   fontSize: 60,
-                  fontFamily: "Schyler"
+                  fontFamily: "Schyler",
+                  letterSpacing: 5
                 ),
               ),
               const SizedBox(height: 90),
@@ -40,18 +51,17 @@ class _RegistrationState extends State<Registration> {
                         prefixStyle:  TextStyle(color: Colors.black),
                       ),
                       style: TextStyle(color: Colors.black),
-                    ),
-                     TextFormField(
-                      maxLength: 10,
-                   //initialValue: "+212",
-                   // controller: TextEditingController(text: "+212 "),
-                      keyboardType: TextInputType.phone,
-                      decoration: const InputDecoration(
-                        hintText: "Phone Number",
-                        prefixStyle:  TextStyle(color: Colors.black),
                       ),
-                      style: TextStyle(color: Colors.black),
-                    ),
+                      TextFormField(
+                        controller: phoneController(),
+                        maxLength: 10,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          hintText: "Phone Number",
+                          prefixStyle:  TextStyle(color: Colors.black),
+                        ),
+                        style: TextStyle(color: Colors.black),
+                      ),
                     const SizedBox(height: 10),
                      TextField(
                       maxLength: 10,
@@ -71,13 +81,13 @@ class _RegistrationState extends State<Registration> {
                     const SizedBox(height: 10),
                     InkWell(
                       child: Container(
-                        child: Text("Sign Up", style: TextStyle( 
+                        child: const Text("Sign Up", style: TextStyle( 
                           color: Colors.white,
                           fontFamily: "Schyler",
                           fontWeight: FontWeight.bold,
                           fontSize: 20
                         ),),
-                        padding: EdgeInsets.all(5),
+                        padding: const EdgeInsets.all(5),
                         width: 150,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
@@ -95,6 +105,19 @@ class _RegistrationState extends State<Registration> {
            ),
         )
        )
-       );
+      );
+  }
+
+  getOtpFormWidget(context){}
+
+  @override
+  Widget build(BuildContext context) {
+    //Size size = MediaQuery.of(context).size;
+    return Scaffold(
+       body: Container(
+         child: currentState == MobileVerificationState.SHOW_MOBILE_FORM_STATE ?
+        getMobileFormWidget(context) : 
+        getOtpFormWidget(context),
+       ));
   }
 }
